@@ -21,7 +21,13 @@ const getBody = (req, callback) => {
 };
 
 // here, you could declare one or more variables to store what comes back from the form.
-let item = "Enter something below.";
+let item = "Do NOT enter your name below.";
+let item2 = "Please don't do it";
+let scaryStuff = ["is going to get a huge pimple in his forehead soon", "is going to cry", "will slip on a banana tomorrow"];
+
+const getRandomNumber = (max) => {
+  return Math.floor(Math.random() * max);
+};
 
 // here, you can change the form below to modify the input fields and what is displayed.
 // This is just ordinary html with string interpolation.
@@ -29,6 +35,7 @@ const form = () => {
   return `
   <body>
   <p>${item}</p>
+  <p>${item2}</p>
   <form method="POST">
   <input name="item"></input>
   <button type="submit">Submit</button>
@@ -45,9 +52,9 @@ const server = http.createServer((req, res) => {
       console.log("The body of the post is ", body);
       // here, you can add your own logic
       if (body["item"]) {
-        item = body["item"];
+        item = `${body["item"]} ${scaryStuff[getRandomNumber(3)]}`;
       } else {
-        item = "Nothing was entered.";
+        item = "Uff good job!";
       }
       // Your code changes would end here
       res.writeHead(303, {
