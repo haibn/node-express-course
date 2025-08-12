@@ -1,9 +1,46 @@
 console.log('Express Tutorial')
 const express = require("express");
 const app = express();
-const { products } = require("./data.js");
+const { products, people } = require("./data.js");
+const peopleRouter = require("./routes/people.js");
 
-app.use(express.static("./public"));
+// week4
+const logger = (req, res, next) => {
+    const method = req.method
+    const url = req.url
+    const time = new Date().toLocaleTimeString()
+    console.log(method, url, time)
+    next();
+}
+
+app.use(express.static("./methods-public"));
+
+// week4
+app.use(logger);
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use("/api/v1/people", peopleRouter);
+
+// app.get("/api/v1/people", (req, res) => {
+//     res.status(200).json(people);
+// })
+
+// app.post("/api/v1/people", (req, res) => {
+//     const data = req.body;
+//     if (!data.name) {
+//         return res.status(400).json({ success: false, message: "Please provide a name" });
+//     }
+//     people.push({ id: people.length + 1, name: data.name })
+//     res.status(201).json({ success: true, name: data.name })
+// })
+
+app.post("/login", (req, res) => {
+    const data = req.body;
+    if (!data.name) {
+        return res.status(400).send("Please Provide Credentials")
+    }
+    res.status(200).send(`Welcome ${data.name}`)
+})
 
 app.get("/api/v1/test", (req, res) => {
     res.status(200).json({ message: "It worked!" });
